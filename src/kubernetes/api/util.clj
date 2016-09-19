@@ -1,7 +1,7 @@
 (ns kubernetes.api.util
   (:require [clojure.string :as str]
             [clojure.core.async :refer [go <! >! chan]]
-            [org.httpkit.client :as http]
+            [clj-http.client :as http]
             [clojure.data.json :as json]))
 
 (defn make-context [server]
@@ -34,13 +34,10 @@
 
 (defn request [ctx {:keys [method path params query body]}]
   (let [c (chan)]
-    (http/request
-     (cond-> {:url (url ctx path params query)
-              :method method
-              :as :text}
-       body (assoc :body (json/write-str body)
-                   :content-type :json))
-     #(go (let [resp (parse-response %)]
-            #_(println "Request" method path query body resp)
-            (>! c resp))))
-    c))
+    (parse-response
+     (http/request
+      {:url (url ctx path params query)
+       :method method
+       :as :text
+       :body (json/write-str body)
+       :content-type :json}))))

@@ -7,7 +7,7 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/core.async "0.2.374"]
                  [org.clojure/data.json "0.2.6"]
-                 [http-kit "2.1.18"]]
+                 [clj-http "2.2.0"]]
 
   :codox {:namespaces [#"kubernetes\.api\.v\d.*"]}
 
